@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 video 对象</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body{
+            background-color: #0f0f0f;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container{
+            width: 600px;
+        }
+        .panel-body{
+            padding: 0;
+        }
+        .video-box{
+            width: 100%;
+            margin: 0 auto;
+            height: 350px;
+            position: relative;
+        }
+        .video-menu{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background-color: #001d26;
+        }
+        .register-box .tab{
+            float: none;
+        }
+        .register-box .tab li{
+            float: left;
+            height: 16px;
+            line-height: 16px;
+            margin-right: 0px;
+            padding: 0px;
+            background-color:#fff;
+            color: #666;
+        }
+        .play span{
+            line-height: 30px;
+            margin: 0 4px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #00c8ff;
+            font-weight: lighter;
+        }
+        .play span:hover{
+            color: #0c62c1;
+        }
+        .configure div{
+            color: #f0f0f0;
+            line-height: 30px;
+        }
+        .configure div span{
+            font-size: 12px;
+        }
+        .configure div span:nth-child(2){
+            font-size: 16px;
+            line-height: 30px;
+        }
+        .volume{
+            height: 30px;
+            position: relative;
+        }
+        .volume-outer{
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px;
+            width: 100%;
+            margin: auto;
+            background-color: #ededed;
+            cursor: pointer;
+        }
+        .volume_this{
+            position: absolute;
+            left: 0;
+            top:0;
+        }
+        .button{
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #ededed;
+            position: absolute;
+            right: -3px;
+            bottom:-1px;
+        }
+        .mute span{
+            cursor: pointer;
+        }
+        .progress-1{
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            left: 0px;
+            bottom: 30px;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .progress-1>div{
+            position: absolute;
+            left: 0;
+            top:0;
+            height: 100%;
+            width: 10px;
+        }
+        .progress_buffer{
+            background-color: #0c62c1;
+        }
+        .sprogress_this{
+            background-color: #00c8ff;
+        }
+        #progress-1 .button{
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container ">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 id="hh3" class="panel-title">Video</h3>
+        </div>
+        <div class="panel-body">
+            <div class="video-box">
+                <div id="video_div" >
+                    <video id="video" poster="https://media.w3.org/2010/05/sintel/poster.png" width="100%" src="http://webkkl.com/api-v/material/sample.mp4"></video>
+                </div>
+                <div class="video-menu container-fluid">
+                    <div class="row">
+                        <div class="play col-xs-4">
+                            <span id="stop"  class="glyphicon  glyphicon-stop"></span>
+                            <span id="backward"  class="glyphicon glyphicon-fast-backward"></span>
+                            <span id="play"  class="glyphicon glyphicon-play"></span>
+                            <span id="pause" class="glyphicon glyphicon-pause"></span>
+                            <span id="forward"  class="glyphicon glyphicon-fast-forward"></span>
+                        </div>
+                        <div class="configure col-xs-8 row">
+                            <div class="timer col-xs-4">
+                                <span class="timeThis" id="curTime">00:00</span><span>/</span><span id="totalTime">00:00</span>
+                            </div>
+                            <div class="col-xs-1 text-right mute">
+                                <span  class="glyphicon glyphicon-volume-down"></span>
+                            </div>
+                            <div class="volume col-xs-3" id="volume">
+                                <div class="volume-outer" id="volume-outer">
+                                    <div id="volume-drag" class="volume_this" style="width:50%; height: 3px; background-color: #007aff;"><div class="button"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <span id="muted" class="glyphicon  glyphicon-volume-off"></span>
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <span id="fullscreen" class="glyphicon glyphicon-fullscreen"></span>
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <span id="exitscreen" class="glyphicon  glyphicon-screenshot"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-1" id="progress-1">
+                        <div class="progress_buffer" id="progress_buffer" style="width:0%;"></div>
+                        <div class="sprogress_this" id="sprogress_this" style="width:0%;"><div class="button"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload=function () {
+        function Drag(id,dragEle) {
+            this.ele=document.getElementById(id) ? document.getElementById(id) : alert('请传入滑动盒子id');
+            this.oScaleEle=document.getElementById(id) ? document.getElementById(dragEle) : alert('请传入拖动元素的id');
+            this.idWidth=this.ele.offsetWidth;
+        }
+        Drag.prototype={
+            constructor:Drag,
+            drag:function (fn) {
+                var _this=this;
+                var clientX,clientY,distanceX,distanceY;
+                this.ele.addEventListener('mousedown',function (event) {
+                    clientX=event.clientX;
+                    distanceX=_this.toBodyLeftDistance(_this.ele);
+                    clientY=event.clientY;
+                    distanceY=_this.toBodyTopDistance(_this.ele);
+                    _this.moveX(clientX,clientY,distanceX,distanceY,fn);
+                },false);
+            },
+            moveX:function (cX,cY,dX,dY,fn) {
+                var _this=this;
+                var fnMove=function (event) {
+                    var l=event.clientX-dX;
+                    var scale=l/_this.idWidth;
+                    (scale<=0) && (scale=0);
+                    (scale>=1) && (scale=1);
+                    _this.oScaleEle.style.width=scale*100+'%';
+                    fn(_this,scale)
+                };
+                var fnUp=function (event) {
+                    document.removeEventListener('mousemove',fnMove,false);
+                    document.removeEventListener('mouseup',fnUp,false);
+                };
+                this.ele.addEventListener('mouseleave',function () {
+                    fnUp();
+                },false);
+                document.addEventListener('mousemove',fnMove,false);
+                document.addEventListener('mouseup',fnUp,false);
+            }
+        };
+        Drag.prototype.toBodyLeftDistance=function (element) {
+            var actualLeft = element.offsetLeft;
+            var current = element.offsetParent;
+            while (current !== null){
+                actualLeft += current.offsetLeft;
+                current = current.offsetParent;
+            }
+            if (document.compatMode == "BackCompat"){
+                var elementScrollLeft=document.body.scrollLeft;
+            } else {
+                var elementScrollLeft=document.documentElement.scrollLeft;
+            }
+            return actualLeft-elementScrollLeft;
+        };
+        Drag.prototype.toBodyTopDistance=function(element){
+            var actualTop = element.offsetTop;
+            var current = element.offsetParent;
+            while (current !== null){
+                actualTop += current. offsetTop;
+                current = current.offsetParent;
+            }
+            if (document.compatMode == "BackCompat"){
+                var elementScrollTop=document.body.scrollTop;
+            } else {
+                var elementScrollTop=document.documentElement.scrollTop;
+            }
+            return actualTop-elementScrollTop;
+        };
+    function Video(obj) {
+        this.v=document.getElementById(obj.id) ? document.getElementById(obj.id) : alert('没有video的id');
+        this.playBtn=document.getElementById(obj.play) ? document.getElementById(obj.play) : alert('没有播放按钮的id');
+        this.pauseBtn=document.getElementById(obj.pause) ? document.getElementById(obj.pause) : alert('没有pause的id');
+        this.stopBtn=document.getElementById(obj.stop) ? document.getElementById(obj.stop) : alert('没有stop的id');
+        this.backBtn=document.getElementById(obj.back) ? document.getElementById(obj.back) : alert('back');
+        this.forwardBtn=document.getElementById(obj.forward) ? document.getElementById(obj.forward) : alert('forward');
+        this.mutedBtn=document.getElementById(obj.muted) ? document.getElementById(obj.muted) : alert('muted');
+        this.enterScreenBtn=document.getElementById(obj.enterScreen) ? document.getElementById(obj.enterScreen) : alert('enterScreen');
+        this.exitScreenBtn=document.getElementById(obj.exitScreenBtn) ? document.getElementById(obj.exitScreenBtn) : alert('exitScreenBtn');
+        this.oAllTime=document.getElementById(obj.totalTime) ? document.getElementById(obj.totalTime) : alert('totalTime');
+        this.initEvent();
+    }
+
+    Video.prototype={
+        contructor:Video,
+        initEvent:function () {
+            this.play();
+            this.pause();
+            this.stop();
+            this.loadstart();
+            this.timeupdate();
+            this.progressFn();
+            this.enterScreen();
+            this.exitScreen();
+            this.forword();
+            this.back();
+            this.mute();
+            this.changeVolume();
+            this.dragProgress();
+        },
+        play:function () {
+            var that=this;
+            this.playBtn.addEventListener('click',function () {
+                that.v.play();
+            },false);
+        },
+        pause:function () {
+            var that=this;
+            this.pauseBtn.addEventListener('click',function () {
+                that.v.pause();
+            },false);
+        },
+        stop:function () {
+            var that=this;
+            this.stopBtn.addEventListener('click',function () {
+                that.v.pause();
+                that.v.currentTime=0;
+            },false);
+        },
+        enterScreen:function () {
+            var that=this;
+            this.enterScreenBtn.addEventListener('click',function () {
+                that.requestFullScreen()
+            },false);
+        },
+        exitScreen:function () {
+            var that=this;
+            this.exitScreenBtn.addEventListener('click',function () {
+                that.exitFullscreen()
+            },false);
+        },
+        loadstart:function () {
+            this.v.addEventListener('loadstart',function () {
+                console.log('客户端开始请求数据');//客户端开始请求数据
+            },false);
+        },
+        progressFn:function () {
+            var that=this;
+            var oAllTime=this.oAllTime;
+            if (this.v.readyState === 4){
+                console.dir(this.onprogress);
+                var oBufferThis=document.getElementById('progress_buffer');
+                this.v.onprogress=function(){
+                    var scale=that.v.buffered.end(0)/that.v.duration;
+                    oBufferThis.style.width=scale*100+'%';
+                    oAllTime.innerHTML=that.toDouble(parseInt(that.v.duration/60))+':'+that.toDouble(parseInt(that.v.duration%60));
+                };
+            }
+        },
+        timeupdate:function () {
+            var that=this;
+            var oAllTime=this.oAllTime;
+            var oSpeedThis=document.getElementById('sprogress_this');
+            var oCurrentTime=document.getElementById('curTime');
+            this.v.addEventListener('timeupdate',function () {
+                var scale=that.v.currentTime/that.v.duration;
+                oCurrentTime.innerHTML=that.toDouble(parseInt(that.v.currentTime/60))+':'+that.toDouble(parseInt(that.v.currentTime%60));
+                oAllTime.innerHTML=that.toDouble(parseInt(that.v.duration/60))+':'+that.toDouble(parseInt(that.v.duration%60));
+                oSpeedThis.style.width=scale*100+'%';
+            },false);
+        },
+        forword:function () {
+            var that=this;
+            this.forwardBtn.addEventListener('click',function () {
+                that.v.currentTime+=3;
+            },false);
+        },
+        back:function () {
+            var that=this;
+            this.backBtn.addEventListener('click',function () {
+                that.v.currentTime-=3;
+            },false);
+        },
+        mute:function () {
+            this.hasVolume=true;
+            var that=this;
+            this.mutedBtn.addEventListener('click',function () {
+                that.hasVolume ? that.v.muted=false :that.v.muted=true;
+                that.hasVolume=that.v.muted;
+            },false);
+        },
+        changeVolume:function () {
+            Drag.call(this,'volume','volume-drag');
+            var fn=function (obj,scale) {
+                obj.v.volume=scale;
+            };
+            this.drag(fn);
+        },
+        dragProgress:function () {
+            var p1=new Drag('progress-1','sprogress_this');
+            var that=this;
+            var fn=function (obj,scale) {
+                that.v.currentTime=that.v.duration*scale;
+                that.v.play();
+            };
+            p1.drag(fn);
+        }
+    };
+    Video.prototype.__proto__=Drag.prototype;
+    Video.prototype.requestFullScreen=function(){
+            var de = document.documentElement;
+            if (de.requestFullscreen) {
+                de.requestFullscreen();
+            } else if (de.mozRequestFullScreen) {
+                de.mozRequestFullScreen();
+            } else if (de.webkitRequestFullScreen) {
+                de.webkitRequestFullScreen();
+            }
+        };
+    Video.prototype.exitFullscreen=function() {
+        var de = document;
+        if (de.exitFullscreen) {
+            de.exitFullscreen();
+        } else if (de.mozCancelFullScreen) {
+            de.mozCancelFullScreen();
+        } else if (de.webkitCancelFullScreen) {
+            de.webkitCancelFullScreen();
+        }
+    };
+    Video.prototype.toDouble=function (num) {
+        return num<10? '0'+num : num;
+    };
+    var obj={
+        id:'video',
+        play:'play',
+        pause:'pause',
+        stop:'stop',
+        back:'backward',
+        forward:'forward',
+        muted:'muted',
+        enterScreen:'fullscreen',
+        exitScreenBtn:'exitscreen',
+        totalTime:'totalTime',
+    };
+    new Video(obj);
+    }
+</script>
+</body>
+</html>
